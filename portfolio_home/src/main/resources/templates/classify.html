@@ -12,7 +12,56 @@
      $("#add").on('click',function(){
     	var jsonObj = $("#myform").serializeObject();
     	var jsonstr = JSON.stringify(jsonObj);
-    	
+    	console.log('序列化後' + jsonObj);
+    	console.log('轉 Json' + jsonstr);
+    	$.ajax({
+    		url:'/portfolio/classify/',
+    		type:'post',
+    		data:jsonstr,
+    		contentType:'application/json;chartset=utf-8',
+    		cache: false,
+    		success : function(){
+    		  alert('新增成功' + jsonstr);
+    		  initPage();
+    		}
+    	});
+     });
+     
+     // upt
+     $("#upt").on('click',function(){
+    	 var jsonobj = $("#myform").serializeObject();
+    	 var jsonstr = JSON.stringify(jsonobj);
+    	 $.ajax({
+    		 url:'/portfolio/classify/' + jsonobj.id,
+    		 type:'put',
+    		 data:jsonstr,
+    		 contentType:'application/json;charset=utf-8',
+    		 cache: false,
+    		 success: function(){
+    			 alert('修改成功' + jsonstr); 
+    			 initPage();
+    		 },
+    		 error : function(){
+    			 alert('請填入資料'); 		 
+    		 }
+    	 });
+     })
+     
+     // del
+     $("#del").on('click',function(){
+    	var id = $("#myform").find('#id').val();
+    	$.ajax({
+			url: "/portfolio/classify/" + id,
+			type: "DELETE",
+			success: function(resp) {
+				console.log(JSON.stringify(resp));
+				initPage();
+			},
+			error: function(req, stat) {
+				alert('此商品分類下仍有股票，無法刪除！');
+				//alert(JSON.stringify(req) + ", " + stat);
+			}
+		});
      });
      
 	 // table -> form
@@ -20,7 +69,7 @@
 		 var id  = $(this).find('td').eq(0).text().trim();
 		 var url = '/portfolio/classify/'+ id;
 		 $.get(url,function(data,status){
-			console.log(data);
+			console.log('get得到資料' + data);
 			// 更改按鈕狀態
 			$("#add").attr('disabled',true);
 			$("#upt").attr('disabled',false);
@@ -50,10 +99,11 @@
 	 // var url = 'http://localhost:8081/portfolio/classify/';
 	 var url = '/portfolio/classify/';
 	 $.get(url,function(datas,status){
-		 console.log(datas);
-		 console.log(status);
+		 console.log('載入資料' + datas);
+		 console.log(JSON.stringify(datas));
+		 console.log('載入狀態' +status);
 		 // 清除原 table 內容
-		 $("#myTable > tr").remove();
+		 $("#myTable tbody > tr").remove();
 		 // 放入資料
 		 $.each(datas , function(i,item){
 			 var html = "<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>"

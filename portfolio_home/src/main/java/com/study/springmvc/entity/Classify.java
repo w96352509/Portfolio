@@ -18,26 +18,26 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table
 public class Classify {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer	id;
+	private Integer id;
 	
 	@Column
-	private String name; // 商品類型名稱
+	private String name; // 分類名稱
 	
 	@Column
-	private Boolean tx;  // 是否支援交易
+	private Boolean tx; // 該商品是否可交易(transaction)
 	
 	@OneToMany(mappedBy = "classify")
 	@JsonIgnoreProperties("classify")
 	private Set<TStock> tStocks;
-
+	
 	public Classify() {
-		
+		 
 	}
 	
-	public Classify(String name, boolean tx) {
+	public Classify(String name, Boolean tx) {
+		super();
 		this.name = name;
 		this.tx = tx;
 	}
@@ -58,7 +58,7 @@ public class Classify {
 		this.name = name;
 	}
 
-	public boolean isTx() {
+	public Boolean getTx() {
 		return tx;
 	}
 
@@ -66,13 +66,12 @@ public class Classify {
 		this.tx = tx;
 	}
 
-	public Set<TStock> getTstocks() {
+	public Set<TStock> gettStocks() {
 		return tStocks;
 	}
 
-	public void setTstocks(Set<TStock> tstocks) {
-		this.tStocks = tstocks;
+	public void settStocks(Set<TStock> tStocks) {
+		this.tStocks = tStocks;
 	}
-	
 	
 }

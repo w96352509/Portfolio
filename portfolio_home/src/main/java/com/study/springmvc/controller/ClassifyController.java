@@ -7,7 +7,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,31 +35,61 @@ import com.study.springmvc.repository.ClassifyRepository;
 @RestController
 @RequestMapping("/classify")
 public class ClassifyController {
-	
+
 	@Autowired
 	private ClassifyRepository classifyRepository;
-	
-	@GetMapping("/")
-	public List<Classify> findAll() {
+
+	@GetMapping(value = {"/", "/query"}) 
+	public List<Classify> query() {
 		return classifyRepository.findAll();
 	}
 	
-	@GetMapping("{id}")
+	@GetMapping(value ={"/{id}", "/get/{id}"}) 
 	public Classify get(@PathVariable("id") Integer id) {
 		Optional<Classify> optClassify = classifyRepository.findById(id);
-		return optClassify.isPresent()?optClassify.get():null;
+		return optClassify.isPresent() ? optClassify.get() : null;
 	}
 	
-	@PostMapping("/")
+	@PostMapping(value = {"/", "/add"})
+	@Transactional
 	public Classify add(@RequestBody Map<String, String> map) {
 		Classify classify = new Classify();
 		classify.setName(map.get("name"));
-		if(map.get("tx")==null) {
+		if(map.get("tx") == null) {
 			classify.setTx(false);
+		} else {
+			classify.setTx(true);
 		}
-		classify.setTx(true);
 		classify = classifyRepository.save(classify);
-		return classify ;
+		return classify;
 	}
 	
+	@PutMapping(value = {"/{id}", "/update/{id}"})
+	@Transactional
+	public Classify update(@PathVariable("id") Integer id, @RequestBody Map<String, String> map) {
+		Classify classify = get(id);
+		if (classify == null) {
+			return null;
+		}
+		// 修改 classify
+		classify.setName(map.get("name"));
+		if(map.get("tx") == null) {
+			classify.setTx(false);
+		} else {
+			classify.setTx(true);
+		}
+		classify = classifyRepository.saveAndFlush(classify);
+		return classify;
+	}
+	
+	@DeleteMapping(value = {"/{id}", "/delete/{id}"})
+	public Boolean delete(@PathVariable("id") Integer id) {
+		Classify classify = get(id);
+		if (classify == null) {
+			return false;
+		}
+		classifyRepository.deleteById(id);
+		return true;
+	}
+
 }
