@@ -23,4 +23,9 @@ public class PageController {
         return "tstock";
     }
 	
+	@RequestMapping("/investor")
+    public String getInvestorPage() {
+        return "investor";
+    }
+	
 }

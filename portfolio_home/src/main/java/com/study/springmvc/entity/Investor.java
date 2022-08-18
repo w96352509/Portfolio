@@ -22,13 +22,13 @@ public class Investor {
 	private Integer id;
 	
 	@Column
-	private String name;
+	private String username;
 	
 	@Column
 	private String email;
 	
 	@Column
-	private Integer blance;
+	private Integer balance;
 	
 	@OneToMany(cascade = CascadeType.REMOVE , mappedBy = "investor")
 	@JsonIgnoreProperties("investor")
@@ -42,11 +42,11 @@ public class Investor {
 		
 	}
 
-	public Investor(String name, String email, Integer blance) {
+	public Investor(String username, String email, Integer blance) {
 		
-		this.name = name;
+		this.username = username;
 		this.email = email;
-		this.blance = blance;
+		this.balance = blance;
 	}
 
 	public Integer getId() {
@@ -57,12 +57,12 @@ public class Investor {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getEmail() {
@@ -73,12 +73,13 @@ public class Investor {
 		this.email = email;
 	}
 
-	public Integer getBlance() {
-		return blance;
+	
+	public Integer getBalance() {
+		return balance;
 	}
 
-	public void setBlance(Integer blance) {
-		this.blance = blance;
+	public void setBalance(Integer balance) {
+		this.balance = balance;
 	}
 
 	public Set<Watch> getWatchs() {
@@ -96,6 +97,7 @@ public class Investor {
 	public void setPortfoilos(Set<Portfoilo> portfoilos) {
 		this.portfoilos = portfoilos;
 	}
+
 	
 	
 	
